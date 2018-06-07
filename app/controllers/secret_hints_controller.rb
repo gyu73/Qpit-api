@@ -1,2 +1,0 @@
-class SecretHintsController < ApplicationController
-end
