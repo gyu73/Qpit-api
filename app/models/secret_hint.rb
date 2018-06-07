@@ -1,0 +1,2 @@
+class SecretHint < ApplicationRecord
+end

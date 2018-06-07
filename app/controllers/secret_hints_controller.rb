@@ -1,0 +1,2 @@
+class SecretHintsController < ApplicationController
+end
