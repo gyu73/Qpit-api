@@ -3,7 +3,7 @@ Rails.application.routes.draw do
    namespace :api, { format: 'json' } do
      resources :hints, only: [:show,:update]
      resources :secret_hints, only: [:show,:update]
-     resources :users, only: [:show,:update]
+     resources :users, only: [:show,:create]
      resources :homes, only: [:show]
    end
 end

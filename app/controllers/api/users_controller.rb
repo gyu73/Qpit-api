@@ -1,10 +1,9 @@
 class Api::UsersController < ApplicationController
 
   def create
-  	if (!current_user.hint && !current_user.secret_hint)
-        hint = Hint.create(user_id: current_user.id)
-        SecretHint.create(hint_id: hint.id, user_id: current_user.id)
-    end
+    user = JSON.parse(twitter_user_params)
+    login_user = User.first_or_create(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"])
+    render json: {user: login_user}
   end
 
   def show
@@ -24,7 +23,7 @@ class Api::UsersController < ApplicationController
   end
 
   private
-    def user_params
-      params.require(:user).permit(:like_person_screen_name,:like_person_twitter_profile_image,:stock_arrow,:coming_arrow_number,:last_shoot_time)
+    def twitter_user_params
+      params.require(:user)
     end
 end

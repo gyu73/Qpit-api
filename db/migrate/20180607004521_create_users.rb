@@ -7,8 +7,8 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string  :like_person_screen_name
       t.string  :like_person_twitter_profile_image
       t.time    :last_shoot_time
-      t.integer :stock_arrow
-      t.integer :coming_arrow_number
+      t.integer :stock_arrow, default: 0
+      t.integer :coming_arrow_number, default: 0
 
       t.timestamps
     end
