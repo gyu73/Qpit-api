@@ -8,5 +8,6 @@ Rails.application.routes.draw do
      put '/secret_hints/users/:id', to: 'secret_hints#create'
      put '/hints/users/:id', to: 'hints#create'
      get '/users/:id/likeperson/secret-hint', to: 'users#getLikePersonSecretHint'
+     get '/users/:id/likeperson/normal-hint', to: 'users#getLikePersonNormalHint'
    end
 end

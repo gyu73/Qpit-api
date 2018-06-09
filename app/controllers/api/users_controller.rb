@@ -22,6 +22,22 @@ class Api::UsersController < ApplicationController
       render json: { user: login_user_after_update }
   end
 
+  def getLikePersonNormalHint
+    hint_content = request.query_parameters["content"]
+    login_user_id = get_like_person_hint_params["id"]
+    login_user = User.find(login_user_id)
+    like_person_screen_name = login_user.like_person_screen_name
+    like_person = User.where(screen_name: like_person_screen_name)[0]
+    answer = "ハズレだよ"
+    # 好きな人のユーザーが存在する時
+    if like_person
+        like_person_normal_hints = Hint.find(like_person.id)
+        # 答えが空のときは"ハズレだよ"を返す
+        answer = !like_person_normal_hints[hint_content].empty? ? like_person_normal_hints[hint_content] : "ハズレだよ"
+    end
+    render json: {answer: answer}
+  end
+
   def getLikePersonSecretHint
     hint_content = request.query_parameters["content"]
     login_user_id = get_like_person_hint_params["id"]
@@ -32,7 +48,8 @@ class Api::UsersController < ApplicationController
     # 好きな人のユーザーが存在する時 && 両思いの時
     if like_person && like_person.like_person_screen_name == login_user.screen_name
         like_person_secret_hints = SecretHint.find(like_person.id)
-        answer = like_person_secret_hints[hint_content]
+        # 答えが空のときは"ハズレだよ"を返す
+        answer = !like_person_secret_hints[hint_content].empty? ? like_person_secret_hints[hint_content] : "ハズレだよ"
     end
     render json: {answer: answer}
   end
