@@ -3,10 +3,10 @@ Rails.application.routes.draw do
    namespace :api, { format: 'json' } do
      resources :hints, only: [:show,:update]
      resources :secret_hints, only: [:create, :show,:update]
-     resources :users, only: [:show,:create]
-     resources :homes, only: [:show]
+     resources :users, only: [:create]
      put '/users/:id/like-person', to: 'users#registerLikePerson'
      put '/secret_hints/users/:id', to: 'secret_hints#create'
      put '/hints/users/:id', to: 'hints#create'
+     get '/users/:id/likeperson/secret-hint', to: 'users#getLikePersonSecretHint'
    end
 end

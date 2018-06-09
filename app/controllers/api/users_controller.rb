@@ -15,10 +15,26 @@ class Api::UsersController < ApplicationController
     login_user.update(like_person_screen_name: register_like_person_params[:like_person_screen_name])
     login_user_after_update = User.find(register_like_person_params[:id])
     like_person = User.where(screen_name: login_user_after_update.like_person_screen_name)
+    # 好きな人が存在すれば、画像も埋め込む。
     if like_person.exists?
       login_user_after_update.update(like_person_twitter_profile_image: like_person[0].profile_image_url_https)
     end
       render json: { user: login_user_after_update }
+  end
+
+  def getLikePersonSecretHint
+    hint_content = request.query_parameters["content"]
+    login_user_id = get_like_person_hint_params["id"]
+    login_user = User.find(login_user_id)
+    like_person_screen_name = login_user.like_person_screen_name
+    like_person = User.where(screen_name: like_person_screen_name)[0]
+    answer = "ハズレだよ"
+    # 好きな人のユーザーが存在する時 && 両思いの時
+    if like_person && like_person.like_person_screen_name == login_user.screen_name
+        like_person_secret_hints = SecretHint.find(like_person.id)
+        answer = like_person_secret_hints[hint_content]
+    end
+    render json: {answer: answer}
   end
 
   def update
@@ -36,5 +52,9 @@ class Api::UsersController < ApplicationController
 
     def register_like_person_params
       {like_person_screen_name: params.permit(:like_person_screen_name)["like_person_screen_name"], id: params.permit(:id)["id"]}
+    end
+
+    def get_like_person_hint_params
+      params.permit(:id)
     end
 end
