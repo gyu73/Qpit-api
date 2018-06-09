@@ -35,7 +35,12 @@ class Api::UsersController < ApplicationController
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_normal_hints[hint_content].empty? ? like_person_normal_hints[hint_content] : "ハズレだよ"
     end
-    render json: {answer: answer}
+    update_coming_arrow_number = 1 + like_person.coming_arrow_number
+    like_person.update(coming_arrow_number: update_coming_arrow_number)
+    update_stock_arrow = login_user.stock_arrow - 1
+    login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
+    binding.pry
+    render json: {user: login_user, answer: answer}
   end
 
   def getLikePersonSecretHint
@@ -51,7 +56,11 @@ class Api::UsersController < ApplicationController
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_secret_hints[hint_content].empty? ? like_person_secret_hints[hint_content] : "ハズレだよ"
     end
-    render json: {answer: answer}
+    update_coming_arrow_number = 1 + like_person.coming_arrow_number
+    like_person.update(coming_arrow_number: update_coming_arrow_number)
+    update_stock_arrow = login_user.stock_arrow - 1
+    login_user.update(stock_arrow: update_stock_arrow)
+    render json: {user: login_user, answer: answer}
   end
 
   def update
