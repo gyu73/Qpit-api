@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2018_06_07_004534) do
     t.string "profile_image_url_https"
     t.string "like_person_screen_name", default: ""
     t.string "like_person_twitter_profile_image", default: ""
-    t.time "last_shoot_time", default: "2000-01-01 01:52:29"
+    t.time "last_shoot_time", default: "2000-01-01 14:29:05"
     t.integer "stock_arrow", default: 0
     t.integer "coming_arrow_number", default: 0
     t.datetime "created_at", null: false
