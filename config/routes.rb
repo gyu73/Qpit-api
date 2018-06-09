@@ -5,5 +5,6 @@ Rails.application.routes.draw do
      resources :secret_hints, only: [:show,:update]
      resources :users, only: [:show,:create]
      resources :homes, only: [:show]
+     put '/users/:id/like-person', to: 'users#registerLikePerson'
    end
 end

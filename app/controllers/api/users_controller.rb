@@ -2,16 +2,19 @@ class Api::UsersController < ApplicationController
 
   def create
     user = JSON.parse(twitter_user_params)
-    login_user = User.first_or_create(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"])
+    login_user = User.where(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"]).first_or_create
     render json: {user: login_user}
   end
 
-  def show
-      @user = User.find(params[:id])
-      @secret_hint = @user.secret_hint
-      @hint = @secret_hint.hint
-
-      render json: { user: @user, secret_hint: @secret_hint, hint: @hint }
+  def registerLikePerson
+    login_user = User.find(register_like_person_params[:id])
+    login_user.update(like_person_screen_name: register_like_person_params[:like_person_screen_name])
+    login_user_after_update = User.find(register_like_person_params[:id])
+    like_person = User.where(screen_name: login_user_after_update.like_person_screen_name)
+    if like_person.exists?
+      login_user_after_update.update(like_person_twitter_profile_image: like_person[0].profile_image_url_https)
+    end
+      render json: { user: login_user_after_update }
   end
 
   def update
@@ -25,5 +28,9 @@ class Api::UsersController < ApplicationController
   private
     def twitter_user_params
       params.require(:user)
+    end
+
+    def register_like_person_params
+      {like_person_screen_name: params.permit(:like_person_screen_name)["like_person_screen_name"], id: params.permit(:id)["id"]}
     end
 end
