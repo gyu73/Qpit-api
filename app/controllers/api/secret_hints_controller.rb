@@ -1,5 +1,12 @@
 class Api::SecretHintsController < ApplicationController
 
+  def create
+    hint_content = request.query_parameters["content"]
+    SecretHint.where(user_id: secret_hint_params["id"])[0].update(hint_content => secret_hint_params["answer"])
+    secret_hint = SecretHint.where(user_id: secret_hint_params["id"])[0]
+    render json: secret_hint
+  end
+
   def show
 
    if !SecretHint.find_by(id: params[:id]).blank?
@@ -31,7 +38,7 @@ class Api::SecretHintsController < ApplicationController
 
   private
   def secret_hint_params
-    params.require(:secret_hint).permit(:like_person_initial,:familiar,:contact_line,:like_person_nickname,:first_meeting,:user_id,:hint_id)
+    params.permit(:answer, :id)
   end
 
 end

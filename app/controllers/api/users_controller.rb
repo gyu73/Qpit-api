@@ -3,6 +3,10 @@ class Api::UsersController < ApplicationController
   def create
     user = JSON.parse(twitter_user_params)
     login_user = User.where(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"]).first_or_create
+    if !Hint.where(user_id: login_user.id).exists?
+      hint = Hint.create(user_id: login_user.id)
+      SecretHint.create(user_id: login_user.id, hint_id: hint.id)
+    end
     render json: {user: login_user}
   end
 
