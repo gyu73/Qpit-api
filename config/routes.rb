@@ -7,5 +7,6 @@ Rails.application.routes.draw do
      resources :homes, only: [:show]
      put '/users/:id/like-person', to: 'users#registerLikePerson'
      put '/secret_hints/users/:id', to: 'secret_hints#create'
+     put '/hints/users/:id', to: 'hints#create'
    end
 end

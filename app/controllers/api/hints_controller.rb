@@ -1,5 +1,12 @@
 class Api::HintsController < ApplicationController
 
+  def create
+    hint_content = request.query_parameters["content"]
+    Hint.where(user_id: secret_hint_params["id"])[0].update(hint_content => secret_hint_params["answer"])
+    hint = Hint.where(user_id: secret_hint_params["id"])[0]
+    render json: hint
+  end
+
   def show
     @helo = !Hint.find_by(id: params[:id])
     if @helo.blank?
@@ -17,8 +24,8 @@ class Api::HintsController < ApplicationController
   end
 
   private
-  def hint_params
-      params.require(:hint).permit(:has_like_person,:belong_to_club,:club,:hair_style,:clothing,:height,:personality,:age,:school,:company,:favorite_phrase,:like_food,:like_music,:hobby,:like_subject,:hate_subject,:has_spoken,:user_id)
+  def secret_hint_params
+    params.permit(:answer, :id)
   end
 
 end
