@@ -6,55 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# ダミーユーザー作成(Sign_up時)
-name = 3
-email = "g"
-98.times {
-User.create(
-  screen_name: "@ユーザー" + name.to_s,
-  name: "ユーザー" + name.to_s,
-  profile_image_url_https: https
-name += 1
-email += "g"
-}
-
-# 友達追加作成
-f = 2
-20.times {
-  Friend.create(user_id: 1, friend_id: f)
-  Friend.create(user_id: f, friend_id: 1)
-  f += 1
-}
-
-# グループ作成(チャット開始)
-x = 1
-10.times {
-Group.create(name: "グループ#{x}", message_created_at: Time.new)
-x += 1
-}
-
-# グループ作成時にこの２つの中間テーブルにレコード挿入
-x = 2
-y = 1
-20.times {
-  UserGroup.create(user_id: 1, group_id: y)
-  UserGroup.create(user_id: x, group_id: y)
-  x += 1
-  y += 1
-}
-
-# メッセージ作成(messagesテーブルで一元管理)
-x = 1
-100.times {
-  message1 = Message.create(message: "メッセージ" + x.to_s, user_id: 1, group_id: 1)
-  AlreadyRead.create(user_id: 1, message_id: message1.id)
-  x += 1
-  message2 = Message.create(message: "メッセージ" + x.to_s, user_id: 2, group_id: 1)
-  AlreadyRead.create(user_id: 2, message_id: message2.id)
-  x += 1
-}
-
-Friend.create(user_id: 1, friend_id: 100)
-User.new(name: "あ", email: "ccc@gmail.com", password: "000000").save(validate: false)
-# User.create(name: "メッセージまだの人", email: "bbb@gmail.com", password: "000000").save(validate: false)
-# UserFriend.create(user_id: 1, friend_id: 101)
+User.create(screen_name: 'Ryota Shiono', name: 'H1aXr', profile_image_url_https: 'https://pbs.twimg.com/profile_images/994149082338803713/UGhh_hkq_400x400.jpg', like_person_screen_name: '田岡雅規', like_person_twitter_profile_image: 'https://pbs.twimg.com/profile_images/828128360794501122/7I5ha6Up_400x400.jpg', last_shoot_time: '12:00:00', stock_arrow: '1', coming_arrow_number: '2')
+Hint.create(has_like_person: 'いる', belong_to_club: '入っている', club: 'テニス部', hair_style: 'ショートカット', clothing: 'カジュアル', height: '156cm', personality: '優しい', age: '19', school: '山本高校', company: 'セブンイレブン', favorite_phrase: '笑顔が素敵がところ' like_food: 'コロッケ', like_music: 'greeeen', hobby: 'ランニング', like_subject: '数学', hate_subject: '社会', has_spoken: 'ある', user_id: '1')
+SecretHint.create(like_person_initial: 'M.K', classroom: '6組', familiar: '親しです', contact_line: 'LINEしてる', like_person_nickname: 'Qちゃん', first_meeting: '入学式', user_id: '1', hint_id: '1')
