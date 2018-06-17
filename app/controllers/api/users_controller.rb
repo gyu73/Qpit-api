@@ -40,7 +40,6 @@ class Api::UsersController < ApplicationController
     end
     update_stock_arrow = login_user.stock_arrow - 1
     login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
-    binding.pry
     render json: {user: login_user, answer: answer}
   end
 
@@ -60,7 +59,7 @@ class Api::UsersController < ApplicationController
         like_person.update(coming_arrow_number: update_coming_arrow_number)
     end
     update_stock_arrow = login_user.stock_arrow - 1
-    login_user.update(stock_arrow: update_stock_arrow)
+    login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
     render json: {user: login_user, answer: answer}
   end
 
@@ -72,6 +71,12 @@ class Api::UsersController < ApplicationController
   def delete
     login_user = User.find(delete_params["id"])
     login_user.destroy
+  end
+
+  def getArrow
+    login_user = User.find(get_arrow_params["id"])
+    login_user.update(stock_arrow: 1)
+    render json: login_user
   end
 
   private
@@ -88,6 +93,10 @@ class Api::UsersController < ApplicationController
     end
 
     def delete_params
+      params.permit(:id)
+    end
+
+    def get_arrow_params
       params.permit(:id)
     end
 end

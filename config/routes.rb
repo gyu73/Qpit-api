@@ -6,6 +6,7 @@ Rails.application.routes.draw do
      put '/users/:id/like-person', to: 'users#registerLikePerson'
      get '/users/:id/likeperson/secret-hint', to: 'users#getLikePersonSecretHint'
      get '/users/:id/likeperson/normal-hint', to: 'users#getLikePersonNormalHint'
+     put '/users/:id/arrow', to: 'users#getArrow'
      delete '/users/:id', to: 'users#logout'
      delete '/users/:id/delete', to: 'users#delete'
 
