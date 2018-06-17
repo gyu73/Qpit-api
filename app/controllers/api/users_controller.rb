@@ -34,9 +34,9 @@ class Api::UsersController < ApplicationController
         like_person_normal_hints = Hint.find(like_person.id)
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_normal_hints[hint_content].empty? ? like_person_normal_hints[hint_content] : "ハズレだよ"
+        update_coming_arrow_number = 1 + like_person.coming_arrow_number
+        like_person.update(coming_arrow_number: update_coming_arrow_number)
     end
-    update_coming_arrow_number = 1 + like_person.coming_arrow_number
-    like_person.update(coming_arrow_number: update_coming_arrow_number)
     update_stock_arrow = login_user.stock_arrow - 1
     login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
     binding.pry
@@ -55,20 +55,12 @@ class Api::UsersController < ApplicationController
         like_person_secret_hints = SecretHint.find(like_person.id)
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_secret_hints[hint_content].empty? ? like_person_secret_hints[hint_content] : "ハズレだよ"
+        update_coming_arrow_number = 1 + like_person.coming_arrow_number
+        like_person.update(coming_arrow_number: update_coming_arrow_number)
     end
-    update_coming_arrow_number = 1 + like_person.coming_arrow_number
-    like_person.update(coming_arrow_number: update_coming_arrow_number)
     update_stock_arrow = login_user.stock_arrow - 1
     login_user.update(stock_arrow: update_stock_arrow)
     render json: {user: login_user, answer: answer}
-  end
-
-  def update
-    user = User.find(params[:id])
-    user.update(user_params)
-    Hint.update(params[:id], has_like_person: nil, belongs_to_club: nil, club: nil, hair_style: nil, clothing: nil, height: nil, personality: nil, age: nil, school: nil, company: nil, favorite_phrase: nil, like_food: nil, like_music: nil, hobby: nil, like_subject: nil, hate_subject: nil, has_spoken: nil)
-    SecretHint.update(params[:id], classroom: nil, like_person_initial: nil, familiar: nil, contact_line: nil, like_person_nickname: nil, first_meeting: nil)
-    render json: user
   end
 
   private
