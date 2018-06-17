@@ -7,6 +7,7 @@ class Api::UsersController < ApplicationController
       hint = Hint.create(user_id: login_user.id)
       SecretHint.create(user_id: login_user.id, hint_id: hint.id)
     end
+    login_user.update(login: true)
     render json: {user: login_user}
   end
 
@@ -63,6 +64,16 @@ class Api::UsersController < ApplicationController
     render json: {user: login_user, answer: answer}
   end
 
+  def logout
+    login_user = User.find(delete_params["id"])
+    login_user.update(login: false)
+  end
+
+  def delete
+    login_user = User.find(delete_params["id"])
+    login_user.destroy
+  end
+
   private
     def twitter_user_params
       params.require(:user)
@@ -73,6 +84,10 @@ class Api::UsersController < ApplicationController
     end
 
     def get_like_person_hint_params
+      params.permit(:id)
+    end
+
+    def delete_params
       params.permit(:id)
     end
 end
