@@ -4,6 +4,7 @@ Rails.application.routes.draw do
      # users
      resources :users, only: [:create]
      put '/users/:id/like-person', to: 'users#registerLikePerson'
+     get '/users/:id', to: 'users#getUserInfo'
      get '/users/:id/likeperson/secret-hint', to: 'users#getLikePersonSecretHint'
      get '/users/:id/likeperson/normal-hint', to: 'users#getLikePersonNormalHint'
      put '/users/:id/arrow', to: 'users#getArrow'

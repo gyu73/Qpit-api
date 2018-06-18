@@ -1,5 +1,11 @@
 class Api::UsersController < ApplicationController
 
+  def getUserInfo
+    login_user = User.find(get_user_info_params[:id])
+    render json: {user: login_user}
+
+  end
+
   def create
     user = JSON.parse(twitter_user_params)
     login_user = User.where(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"]).first_or_create
@@ -80,6 +86,10 @@ class Api::UsersController < ApplicationController
   end
 
   private
+    def get_user_info_params
+      params.permit(:id)
+    end
+
     def twitter_user_params
       params.require(:user)
     end
