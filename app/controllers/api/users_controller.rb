@@ -1,5 +1,11 @@
 class Api::UsersController < ApplicationController
 
+  def getUserInfo
+    login_user = User.find(get_user_info_params[:id])
+    render json: {user: login_user}
+
+  end
+
   def create
     user = JSON.parse(twitter_user_params)
     login_user = User.where(screen_name: user["screen_name"], name: user["name"], profile_image_url_https: user["profile_image_url_https"]).first_or_create
@@ -7,6 +13,7 @@ class Api::UsersController < ApplicationController
       hint = Hint.create(user_id: login_user.id)
       SecretHint.create(user_id: login_user.id, hint_id: hint.id)
     end
+    login_user.update(login: true)
     render json: {user: login_user}
   end
 
@@ -34,12 +41,11 @@ class Api::UsersController < ApplicationController
         like_person_normal_hints = Hint.find(like_person.id)
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_normal_hints[hint_content].empty? ? like_person_normal_hints[hint_content] : "ハズレだよ"
+        update_coming_arrow_number = 1 + like_person.coming_arrow_number
+        like_person.update(coming_arrow_number: update_coming_arrow_number)
     end
-    update_coming_arrow_number = 1 + like_person.coming_arrow_number
-    like_person.update(coming_arrow_number: update_coming_arrow_number)
     update_stock_arrow = login_user.stock_arrow - 1
     login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
-    binding.pry
     render json: {user: login_user, answer: answer}
   end
 
@@ -55,23 +61,35 @@ class Api::UsersController < ApplicationController
         like_person_secret_hints = SecretHint.find(like_person.id)
         # 答えが空のときは"ハズレだよ"を返す
         answer = !like_person_secret_hints[hint_content].empty? ? like_person_secret_hints[hint_content] : "ハズレだよ"
+        update_coming_arrow_number = 1 + like_person.coming_arrow_number
+        like_person.update(coming_arrow_number: update_coming_arrow_number)
     end
-    update_coming_arrow_number = 1 + like_person.coming_arrow_number
-    like_person.update(coming_arrow_number: update_coming_arrow_number)
     update_stock_arrow = login_user.stock_arrow - 1
-    login_user.update(stock_arrow: update_stock_arrow)
+    login_user.update(stock_arrow: update_stock_arrow, last_shoot_time: Time.now)
     render json: {user: login_user, answer: answer}
   end
 
-  def update
-    user = User.find(params[:id])
-    user.update(user_params)
-    Hint.update(params[:id], has_like_person: nil, belongs_to_club: nil, club: nil, hair_style: nil, clothing: nil, height: nil, personality: nil, age: nil, school: nil, company: nil, favorite_phrase: nil, like_food: nil, like_music: nil, hobby: nil, like_subject: nil, hate_subject: nil, has_spoken: nil)
-    SecretHint.update(params[:id], classroom: nil, like_person_initial: nil, familiar: nil, contact_line: nil, like_person_nickname: nil, first_meeting: nil)
-    render json: user
+  def logout
+    login_user = User.find(delete_params["id"])
+    login_user.update(login: false)
+  end
+
+  def delete
+    login_user = User.find(delete_params["id"])
+    login_user.destroy
+  end
+
+  def getArrow
+    login_user = User.find(get_arrow_params["id"])
+    login_user.update(stock_arrow: 1)
+    render json: login_user
   end
 
   private
+    def get_user_info_params
+      params.permit(:id)
+    end
+
     def twitter_user_params
       params.require(:user)
     end
@@ -81,6 +99,14 @@ class Api::UsersController < ApplicationController
     end
 
     def get_like_person_hint_params
+      params.permit(:id)
+    end
+
+    def delete_params
+      params.permit(:id)
+    end
+
+    def get_arrow_params
       params.permit(:id)
     end
 end

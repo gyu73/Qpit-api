@@ -6,9 +6,10 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string  :profile_image_url_https
       t.string  :like_person_screen_name, default: ''
       t.string  :like_person_twitter_profile_image, default: ''
-      t.time    :last_shoot_time, default: Time.now
-      t.integer :stock_arrow, default: 0
+      t.datetime    :last_shoot_time, default: Time.now
+      t.integer :stock_arrow, default: 1
       t.integer :coming_arrow_number, default: 0
+      t.boolean :login, default: true
 
       t.timestamps
     end
