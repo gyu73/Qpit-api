@@ -25,7 +25,7 @@ class Api::UsersController < ApplicationController
     if like_person.exists?
       login_user_after_update.update(like_person_twitter_profile_image: like_person[0].profile_image_url_https, like_person_exists: true)
     else
-      login_user_after_update.update(like_person_twitter_profile_image: "https://pbs.twimg.com/profile_images/1006101721024610305/G302QDgO_400x400.jpg", like_person_exists: false)
+      login_user_after_update.update(like_person_twitter_profile_image: "https://s3-ap-northeast-1.amazonaws.com/qpit/notRegisted.png", like_person_exists: false)
     end
       render json: { user: login_user_after_update }
   end
