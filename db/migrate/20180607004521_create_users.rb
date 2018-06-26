@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.integer :stock_arrow, default: 1
       t.integer :coming_arrow_number, default: 0
       t.boolean :login, default: true
+      t.boolean :like_person_exists, default: false
 
       t.timestamps
     end

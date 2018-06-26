@@ -23,9 +23,9 @@ class Api::UsersController < ApplicationController
     like_person = User.where(screen_name: login_user_after_update.like_person_screen_name)
     # 好きな人が存在すれば、画像も埋め込む。
     if like_person.exists?
-      login_user_after_update.update(like_person_twitter_profile_image: like_person[0].profile_image_url_https)
+      login_user_after_update.update(like_person_twitter_profile_image: like_person[0].profile_image_url_https, like_person_exists: true)
     else
-      login_user_after_update.update(like_person_twitter_profile_image: "https://pbs.twimg.com/profile_images/1006101721024610305/G302QDgO_400x400.jpg")
+      login_user_after_update.update(like_person_twitter_profile_image: "https://pbs.twimg.com/profile_images/1006101721024610305/G302QDgO_400x400.jpg", like_person_exists: false)
     end
       render json: { user: login_user_after_update }
   end
